@@ -63,7 +63,7 @@ def smooth(x, e0, e1):
     return t * t * (3 - 2 * t)
 
 
-def build(src, out):
+def build(src, out, collect=None):
     rng = np.random.default_rng(7)
     im = Image.open(src).convert("RGB")
     sw, sh = im.size
@@ -140,12 +140,15 @@ def build(src, out):
     img = np.clip(img, 0, 1)
 
     canvas = Image.fromarray((img * 255).astype(np.uint8))
+    if collect is not None:
+        collect['bg'] = img.copy()
+        collect['layers'] = []
 
     # ---------- textos ----------
     def text_layer():
         return Image.new("L", (W * SS, H * SS), 0)
 
-    def comp(layer_L, color, opacity=1.0, smear=0, smear_amt=0.0, shift=0):
+    def comp(layer_L, color, opacity=1.0, smear=0, smear_amt=0.0, shift=0, name=''):
         """Pega una capa de texto con color; opcionalmente con estela horizontal."""
         nonlocal canvas
         m = layer_L.resize((W, H), Image.LANCZOS)
@@ -157,6 +160,8 @@ def build(src, out):
             tail = np.roll(tail, smear // 2, axis=1)
             ma = np.maximum(ma, tail * smear_amt)
         ma = (ma * opacity)[..., None]
+        if collect is not None:
+            collect['layers'].append((name, ma[..., 0].copy(), np.array(color, np.float32) / 255))
         c = np.asarray(canvas, np.float32) / 255
         col = np.array(color, np.float32) / 255
         c = c * (1 - ma) + col * ma
@@ -172,7 +177,7 @@ def build(src, out):
     lm = logo_mask(1060 * SS)
     L.paste(lm, (10 * SS, 40 * SS), lm)
     L = L.filter(ImageFilter.GaussianBlur(4 * SS))
-    comp(L, (200, 180, 235), 0.5, smear=40, smear_amt=0.6)
+    comp(L, (200, 180, 235), 0.5, smear=40, smear_amt=0.6, name='ghost')
 
     # listado de fechas
     L = text_layer(); d = ImageDraw.Draw(L)
@@ -201,31 +206,34 @@ def build(src, out):
                 ox = (cx + dx) * SS + tw + 12 * SS
                 dh.ellipse((ox, y + 6 * SS, ox + 22 * SS, y + 28 * SS), outline=255, width=3 * SS)
                 dh.ellipse((ox + 7 * SS, y + 13 * SS, ox + 15 * SS, y + 21 * SS), fill=255)
-    comp(L, (40, 30, 55), 0.92, smear=26, smear_amt=0.55)
-    comp(Lhi, (95, 70, 120), 0.85, smear=10, smear_amt=0.4)
+    comp(L, (40, 30, 55), 0.92, smear=26, smear_amt=0.55, name='dates')
+    comp(Lhi, (95, 70, 120), 0.85, smear=10, smear_amt=0.4, name='dates')
+    if collect is not None:
+        collect['rows'] = [ytop] + [ytop + step * 1.55 + i * step for i in range(len(FECHAS_1))]
+        collect['step'] = step
 
     # nombre (izq) y tour (der), dos líneas solapadas
     fn = font("Playfair.ttf", 54 * SS, "Black")
     L = text_layer()
     lm = logo_mask(250 * SS)
     L.paste(lm, (50 * SS, 1000 * SS), lm)
-    comp(L, (20, 14, 26), 0.95)
-    comp(L, (150, 90, 210), 0.35, shift=5)
+    comp(L, (20, 14, 26), 0.95, name='logo')
+    comp(L, (150, 90, 210), 0.35, shift=5, name='logo')
     for txt, x, align in ((TOUR, 1030, "r"),):
         L = text_layer(); d = ImageDraw.Draw(L)
         for j, t in enumerate(txt):
             tw = d.textlength(t, font=fn)
             px = x * SS if align == "l" else x * SS - tw
             d.text((px, (1000 + j * 30) * SS), t, font=fn, fill=255)
-        comp(L, (20, 14, 26), 0.95)
-        comp(L, (150, 90, 210), 0.35, shift=5)
+        comp(L, (20, 14, 26), 0.95, name='tour')
+        comp(L, (150, 90, 210), 0.35, shift=5, name='tour')
 
     # pie: "más fechas por confirmar"
     L = text_layer(); d = ImageDraw.Draw(L)
     fp = font("Oswald.ttf", 30 * SS, "Light")
     tw = d.textlength(PIE, font=fp)
     d.text(((W * SS - tw) / 2, 1560 * SS), PIE, font=fp, fill=255)
-    comp(L, (238, 234, 246), 0.9, smear=40, smear_amt=0.5)
+    comp(L, (238, 234, 246), 0.9, smear=40, smear_amt=0.5, name='pie')
 
     # letra pequeña espaciada
     L = text_layer(); d = ImageDraw.Draw(L)
@@ -242,7 +250,7 @@ def build(src, out):
         spaced = " ".join(ln)
         tw = d.textlength(spaced, font=fs)
         d.text(((W * SS - tw) / 2, (1670 + i * 18) * SS), spaced, font=fs, fill=255)
-    comp(L, (235, 230, 245), 0.75, smear=12, smear_amt=0.4)
+    comp(L, (235, 230, 245), 0.75, smear=12, smear_amt=0.4, name='small')
 
     # sello abajo a la derecha
     L = text_layer(); d = ImageDraw.Draw(L)
@@ -252,7 +260,7 @@ def build(src, out):
     fb = font("Playfair.ttf", 50 * SS, "Black")
     tw = d.textlength(NOMBRE[0][0], font=fb)
     d.text((bx + 35 * SS - tw / 2, by + 16 * SS), NOMBRE[0][0], font=fb, fill=255)
-    comp(L, (245, 242, 250), 0.9)
+    comp(L, (245, 242, 250), 0.9, name='badge')
 
     # ---------- grano + scanlines suaves ----------
     c = np.asarray(canvas, np.float32) / 255
