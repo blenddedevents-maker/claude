@@ -11,7 +11,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 F = lambda n: os.path.join(HERE, "fonts", n)
 
 # ----------------------------- CONFIG -----------------------------
-NOMBRE = ("TU", "NOMBRE")          # se dibuja en dos líneas solapadas
+NOMBRE = ("MARC", "PADILLA")
+LOGO = os.path.join(HERE, "logo.jpg")  # logo blanco sobre fondo negro
 TOUR = ("TOUR", "2027")
 TITULO_FONDO = ("PRÓXIMAS", "FECHAS")
 MES_1, FECHAS_1 = "DICIEMBRE", [
@@ -174,11 +175,15 @@ def build(src, out):
 
     # título fantasma gigante al fondo
     L = text_layer(); d = ImageDraw.Draw(L)
-    ft = font("Playfair.ttf", 300 * SS, "Black")
-    d.text((-30 * SS, -60 * SS), TITULO_FONDO[0], font=ft, fill=255)
-    d.text((140 * SS, 170 * SS), TITULO_FONDO[1], font=ft, fill=255)
+    def logo_mask(width):
+        lg = Image.open(LOGO).convert("L")
+        lg = lg.point(lambda v: 255 if v > 128 else 0)
+        lg = lg.crop(lg.getbbox())
+        return lg.resize((width, int(lg.height * width / lg.width)), Image.LANCZOS)
+    lm = logo_mask(1060 * SS)
+    L.paste(lm, (10 * SS, 40 * SS), lm)
     L = L.filter(ImageFilter.GaussianBlur(4 * SS))
-    comp(L, (200, 180, 235), 0.42, smear=40, smear_amt=0.6)
+    comp(L, (200, 180, 235), 0.5, smear=40, smear_amt=0.6)
 
     # listado de fechas
     fm = font("Playfair.ttf", 38 * SS, "Black")
@@ -204,7 +209,12 @@ def build(src, out):
 
     # nombre (izq) y tour (der), dos líneas solapadas
     fn = font("Playfair.ttf", 54 * SS, "Black")
-    for txt, x, align in ((NOMBRE, 50, "l"), (TOUR, 1030, "r")):
+    L = text_layer()
+    lm = logo_mask(250 * SS)
+    L.paste(lm, (50 * SS, 1000 * SS), lm)
+    comp(L, (20, 14, 26), 0.95)
+    comp(L, (150, 90, 210), 0.35, shift=5)
+    for txt, x, align in ((TOUR, 1030, "r"),):
         L = text_layer(); d = ImageDraw.Draw(L)
         for j, t in enumerate(txt):
             tw = d.textlength(t, font=fn)
