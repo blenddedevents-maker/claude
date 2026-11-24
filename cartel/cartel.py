@@ -13,26 +13,15 @@ F = lambda n: os.path.join(HERE, "fonts", n)
 # ----------------------------- CONFIG -----------------------------
 NOMBRE = ("MARC", "PADILLA")
 LOGO = os.path.join(HERE, "logo.jpg")  # logo blanco sobre fondo negro
-TOUR = ("TOUR", "2027")
+TOUR = ("TOUR", "2026")
 TITULO_FONDO = ("PRÓXIMAS", "FECHAS")
 MES_1, FECHAS_1 = "DICIEMBRE", [
-    ("05/12", "SALA APOLO, BARCELONA", True),
-    ("06/12", "LA RIVIERA, MADRID", False),
-    ("12/12", "SALA MOON, VALENCIA", True),
-    ("13/12", "INDUSTRIAL COPERA, GRANADA", False),
-    ("19/12", "SALA X, SEVILLA", True),
-    ("20/12", "TBA", False),
-    ("27/12", "RAZZMATAZZ, BARCELONA", True),
+    ("05/12", "OSCARS PUB, VINARÒS", False),
+    ("05/12", "FRENESÍ CLUB, VINARÒS", False),
+    ("19/12", "KINTOS, ULLDECONA", False),
+    ("25/12", "OSCARS PUB, VINARÒS", False),
 ]
-MES_2, FECHAS_2 = "ENERO", [
-    ("09/01", "SALA CAPITOL, SANTIAGO", False),
-    ("10/01", "KAFE ANTZOKIA, BILBAO", True),
-    ("16/01", "SALA LA RAQUETA, MURCIA", False),
-    ("17/01", "LA PEREZA, ZARAGOZA", True),
-    ("23/01", "TBA", False),
-    ("30/01", "SALA BUT, MADRID", True),
-    ("31/01", "SALA APOLO, BARCELONA", True),
-]
+MES_2, FECHAS_2 = "", []   # segundo mes opcional (columna derecha)
 PIE = "más fechas por confirmar"
 LETRA_PEQUENA = ("ESTO SOLO ES EL PRINCIPIO · CADA NOCHE UNA HISTORIA DISTINTA · "
                  "NOS VEMOS DELANTE DEL ESCENARIO · GRACIAS POR ESTAR AQUÍ DESDE EL PRIMER DÍA")
@@ -186,22 +175,30 @@ def build(src, out):
     comp(L, (200, 180, 235), 0.5, smear=40, smear_amt=0.6)
 
     # listado de fechas
-    fm = font("Playfair.ttf", 38 * SS, "Black")
-    fd = font("Oswald.ttf", 23 * SS, "Medium")
-    colx = [80, 560]
-    ytop = 150
-    step = 36
     L = text_layer(); d = ImageDraw.Draw(L)
     Lhi = text_layer(); dh = ImageDraw.Draw(Lhi)
-    for cx, mes, fechas in ((colx[0], MES_1, FECHAS_1), (colx[1], MES_2, FECHAS_2)):
+    if FECHAS_2:
+        fm = font("Playfair.ttf", 38 * SS, "Black")
+        fd = font("Oswald.ttf", 23 * SS, "Medium")
+        cols = [(80, MES_1, FECHAS_1), (560, MES_2, FECHAS_2)]
+        ytop, step, dx = 150, 36, 68
+    else:  # un solo mes: columna centrada y más grande
+        fm = font("Playfair.ttf", 64 * SS, "Black")
+        fd = font("Oswald.ttf", 38 * SS, "Medium")
+        dx = 112
+        wmax = max(d.textlength(sl, font=fd) for _, sl, _ in FECHAS_1) / SS + dx
+        wmax = max(wmax, d.textlength(MES_1, font=fm) / SS)
+        cols = [(int((W - wmax) / 2), MES_1, FECHAS_1)]
+        ytop, step = 140, 60
+    for cx, mes, fechas in cols:
         d.text((cx * SS, ytop * SS), mes, font=fm, fill=255)
         for i, (dia, sala, hot) in enumerate(fechas):
-            y = (ytop + 56 + i * step) * SS
+            y = (ytop + step * 1.55 + i * step) * SS
             d.text((cx * SS, y), dia, font=fd, fill=255)
-            d.text(((cx + 68) * SS, y), sala, font=fd, fill=255)
+            d.text(((cx + dx) * SS, y), sala, font=fd, fill=255)
             if hot:  # marcador: pequeño círculo con ★ (sold out / pocas entradas)
                 tw = d.textlength(sala, font=fd)
-                ox = (cx + 68) * SS + tw + 12 * SS
+                ox = (cx + dx) * SS + tw + 12 * SS
                 dh.ellipse((ox, y + 6 * SS, ox + 22 * SS, y + 28 * SS), outline=255, width=3 * SS)
                 dh.ellipse((ox + 7 * SS, y + 13 * SS, ox + 15 * SS, y + 21 * SS), fill=255)
     comp(L, (40, 30, 55), 0.92, smear=26, smear_amt=0.55)
