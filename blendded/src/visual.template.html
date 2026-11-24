@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BLENDDED Festival Visual</title>
+<style>
+  :root { --bg: #000; --fg: #e9e4ff; --muted: #8c82b8; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #000; --fg: #e9e4ff; } }
+  :root[data-theme="dark"] { --bg: #000; --fg: #e9e4ff; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--fg); overflow: hidden;
+    font: 13px/1.4 system-ui, -apple-system, Segoe UI, sans-serif; }
+  canvas { position: fixed; inset: 0; margin: auto; width: 100vw; height: 56.25vw; max-height: 100vh; max-width: 177.78vh; display: block; }
+  #hud { position: fixed; left: 16px; bottom: 12px; color: var(--muted); letter-spacing: .04em; user-select: none; }
+  #hud b { color: var(--fg); font-weight: 600; }
+  body.offline #hud { display: none; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="hud"><b>BLENDDED</b> · bucle 15 s · 128 BPM · <span id="t">0.00</span> s — clic: pantalla completa</div>
+<script>
+const LOGO_TEX = "__LOGO_TEX__";
+const FLARES = __FLARES__;          // [x, y, size, colourIndex, phase] in logo-texture uv
+const LOOP = 15.0;
+
+const VS = `#version 300 es
+in vec2 p; void main(){ gl_Position = vec4(p,0.,1.); }`;
+
+const COMMON = `#version 300 es
+precision highp float;
+#define TAU 6.28318530718
+uniform vec2 R;      // target resolution
+uniform float P;     // loop phase 0..1  (15 s, 32 beats @128 BPM)
+out vec4 o;
+vec3 mod289(vec3 x){return x-floor(x*(1./289.))*289.;}
+vec2 mod289(vec2 x){return x-floor(x*(1./289.))*289.;}
+vec3 permute(vec3 x){return mod289(((x*34.)+1.)*x);}
+float snoise(vec2 v){
+  const vec4 C=vec4(.211324865405187,.366025403784439,-.577350269189626,.024390243902439);
+  vec2 i=floor(v+dot(v,C.yy)); vec2 x0=v-i+dot(i,C.xx);
+  vec2 i1=(x0.x>x0.y)?vec2(1.,0.):vec2(0.,1.);
+  vec4 x12=x0.xyxy+C.xxzz; x12.xy-=i1; i=mod289(i);
+  vec3 pp=permute(permute(i.y+vec3(0.,i1.y,1.))+i.x+vec3(0.,i1.x,1.));
+  vec3 m=max(.5-vec3(dot(x0,x0),dot(x12.xy,x12.xy),dot(x12.zw,x12.zw)),0.); m=m*m; m=m*m;
+  vec3 x=2.*fract(pp*C.www)-1.; vec3 h=abs(x)-.5; vec3 ox=floor(x+.5); vec3 a0=x-ox;
+  m*=1.79284291400159-.85373472095314*(a0*a0+h*h);
+  vec3 g; g.x=a0.x*x0.x+h.x*x0.y; g.yz=a0.yz*x12.xz+h.yz*x12.yw; return 130.*dot(m,g);
+}
+float fbm(vec2 p){ float s=0.,a=.5; mat2 r=mat2(.8,.6,-.6,.8);
+  for(int i=0;i<3;i++){ s+=a*snoise(p); p=r*p*2.03+11.7; a*=.42; } return s; }
+float h21(vec2 p){ p=fract(p*vec2(123.34,456.21)); p+=dot(p,p+45.32); return fract(p.x*p.y); }
+vec2 h22(vec2 p){ float n=h21(p); return vec2(n,h21(p+n*19.19)); }
+// ---- musical clock (all periodic in P) ----
+float beat(){ return P*32.; }
+float kick(){ return exp(-fract(beat())*5.5); }
+float sinceDrop(){ return mod(beat()-8.,16.); }           // drops on beat 8 and 24
+float dropEnv(){ float d=sinceDrop(); return exp(-d*.55); }
+float buildUp(){ return smoothstep(10.,16.,sinceDrop()); }
+float highSection(){ float d=sinceDrop(); return smoothstep(0.,.15,d)*(1.-smoothstep(6.,9.,d)); }
+`;
+
+// ---------- PASS 1: volumetric energy currents (half resolution, HDR) ----------
+const FS_BG = COMMON + `
+void main(){
+  vec2 uv=(gl_FragCoord.xy-.5*R)/R.y;
+  float a=TAU*P;
+  uv+=.012*vec2(cos(a),sin(2.*a));                           // imperceptible camera drift
+  // shockwave space distortion
+  float tsd=sinceDrop()*.46875;
+  vec2 e=uv*vec2(.52,1.);
+  float rr=length(e);
+  float sr=.08+tsd*.85;
+  float ring=exp(-pow((rr-sr)/.012,2.))*exp(-tsd*1.1);
+  float ring2=exp(-pow((rr-sr*.62)/.03,2.))*exp(-tsd*1.6);
+  uv+=normalize(e+1e-5)*(ring*.03+ring2*.015);
+
+  vec2 c1=vec2(cos(a),sin(a)), c2=vec2(cos(2.*a+1.3),sin(2.*a+1.3));
+  vec2 q=uv*vec2(.75,1.15);
+  vec2 w1=vec2(fbm(q+.38*c1), fbm(q+vec2(5.2,1.3)-.38*c1.yx));
+  vec2 w2=vec2(fbm(q*1.3+1.1*w1+.2*c2+vec2(1.7,9.2)), fbm(q*1.3+1.1*w1-.2*c2+vec2(8.3,2.8)));
+  float f=fbm(q*1.1+1.2*w2+.08*c1);
+
+  // currents = bundles of fine parallel strands following iso-lines of the warped field
+  float v=f*1.6+w2.x*.4+uv.y*.35;
+  float strands=0., glow=0.;
+  for(int k=0;k<7;k++){
+    float fk=float(k)-3.;
+    float d=abs(fract(v+fk*.022)-.5);
+    float wk=.011;
+    float wt=1.-abs(fk)/4.;
+    strands+=exp(-d*d/(wk*wk))*wt;
+  }
+  float dc=abs(fract(v)-.5);
+  glow=exp(-dc*dc*160.);
+  // let currents fade in and out along their length
+  float cluster=smoothstep(-.1,.45,w2.y+.15*sin(a+w1.x*3.))*smoothstep(-.45,.25,w1.x+.2);
+
+  float band=exp(-uv.y*uv.y*5.);
+  float edge=1.-smoothstep(.5,1.05,length(uv*vec2(.62,1.05)));
+  float comp=mix(.25,1.,band)*edge;
+
+  float energy=.7+.45*buildUp()+1.5*dropEnv()+.15*kick();
+  vec3 violet=vec3(.42,.06,1.), uvp=vec3(.66,.14,1.), blue=vec3(.22,.34,1.), lilac=vec3(.9,.82,1.);
+  vec3 tint=mix(violet,blue,smoothstep(-.35,.45,w1.y));
+  tint=mix(tint,uvp,smoothstep(.1,.6,f));
+  vec3 col=tint*(strands*1.05+glow*.45)*cluster*comp*energy;
+  col+=lilac*pow(min(strands,1.),4.)*cluster*comp*energy*.6;
+  // deep nebula body (keeps the black deep)
+  col+=vec3(.07,.008,.16)*pow(smoothstep(.0,.9,f),2.)*comp*(.35+.5*dropEnv());
+  // shock rings
+  float rfade=.5+.5*band;
+  col+=(vec3(.55,.30,1.)*ring*.55+vec3(.9,.85,1.)*pow(ring,6.)*.7+vec3(.35,.2,1.)*ring2*.18)*rfade;
+  o=vec4(col,1.);
+}`;
+
+// ---------- PASS 2: lasers, particles, chrome logo, flares, grade ----------
+const FS_MAIN = COMMON + `
+uniform sampler2D BG; uniform sampler2D LOGO;
+uniform vec4 FL[8]; uniform int NFL;
+const float LOGO_FRAC=.66;          // logo width as fraction of frame width
+vec3 aces(vec3 x){ return clamp((x*(2.51*x+.03))/(x*(2.43*x+.59)+.14),0.,1.); }
+
+vec3 lasers(vec2 uv,float a){
+  vec3 c=vec3(0.);
+  float hs=highSection(); float env=mix(.05,1.,hs)*(.5+.5*kick())+.3*buildUp()*(.5+.5*kick());
+  for(int i=0;i<6;i++){
+    float fi=float(i);
+    vec2 org=vec2(-.95+fi*.38,-.62);
+    float k=float(1+i%3);
+    float th=1.5708+.55*sin(a*k+fi*1.7)*(fi<2.5?1.:-1.);
+    vec2 dir=vec2(cos(th),sin(th));
+    vec2 r=uv-org; float al=dot(r,dir); if(al<0.) continue;
+    float dd=abs(r.x*dir.y-r.y*dir.x);
+    float w=.0011+al*.0016;
+    float fade=exp(-al*1.5);
+    c+=(vec3(.55,.18,1.)*exp(-dd*dd/(w*w))*1.6+vec3(.95,.9,1.)*exp(-dd*dd/(w*w*.12))*.9*hs+vec3(.3,.08,.8)*exp(-dd*55.)*.18)*fade;
+  }
+  // crossing beams from upper corners during drops
+  for(int i=0;i<2;i++){
+    float s=i==0?-1.:1.;
+    vec2 org=vec2(s*1.05,.62);
+    float th=(i==0?-.55:-2.59)+.28*sin(a*2.+float(i)*3.1);
+    vec2 dir=vec2(cos(th),sin(th)); vec2 r=uv-org; float al=dot(r,dir);
+    if(al<0.) continue;
+    float dd=abs(r.x*dir.y-r.y*dir.x); float w=.0012+al*.0012;
+    c+=(vec3(.45,.3,1.)*exp(-dd*dd/(w*w))*1.3+vec3(1.)*exp(-dd*dd/(w*w*.1))*.6)*exp(-al*1.1)*hs*1.1;
+  }
+  return c*env;
+}
+
+vec3 particles(vec2 uv,float a){
+  vec3 c=vec3(0.);
+  float d=sinceDrop();
+  float S=(1.-exp(-d*.9))/(1.-exp(-14.4));
+  float burst=.07*(S-d/16.);                                  // surge on drop, still periodic
+  for(int L=0;L<5;L++){
+    float fl=float(L);
+    float z=fract(P*2.+fl*.2+burst);
+    float sc=exp2(mix(-1.5,2.8,z));
+    float alpha=smoothstep(0.,.25,z)*smoothstep(1.,.75,z);
+    vec2 g=uv/sc*7.+fl*17.3;
+    vec2 id=floor(g), f=fract(g);
+    for(int j=0;j<4;j++){
+      vec2 o2=vec2(j%2,j/2)-.5+step(.5,f)-.5; // 2x2 neighbourhood
+      vec2 cid=id+o2; vec2 rp=h22(cid+fl*3.1);
+      vec2 pp=cid+rp-g;
+      float rnd=h21(cid*1.7+fl);
+      if(rnd>.55) continue;
+      float r=length(pp)*sc/7.;
+      float size=(.0007+.0016*rnd)*(.4+z*1.6);
+      float tw=.55+.45*sin(a*float(1+int(rnd*5.))+rnd*TAU);
+      vec3 pc=mix(vec3(.75,.65,1.),vec3(.45,.2,1.),step(.3,rnd));
+      c+=pc*(exp(-r*r/(size*size))*1.4+exp(-r/(size*6.))*.05)*alpha*tw;
+    }
+  }
+  return c*(.75+.6*dropEnv());
+}
+
+vec4 logoTex(vec2 t){ return texture(LOGO,t); }
+
+// 3D orbital currents: tilted elliptical bundles circling the logo (front arc below, back arc above)
+vec3 orbit(vec2 uv,float a){
+  vec3 c=vec3(0.);
+  float px=1./R.y;
+  float en=.55+.35*buildUp()+1.2*dropEnv()+.2*kick();
+  for(int r=0;r<2;r++){
+    float fr=float(r);
+    float tilt=(fr<.5?.045:-.07)+.035*sin(a+fr*2.);
+    vec2 p=mat2(cos(tilt),sin(tilt),-sin(tilt),cos(tilt))*uv;
+    vec2 rad=vec2(.74+fr*.07,.175+fr*.05+.012*sin(a*2.+fr));
+    float th=atan(p.y/rad.y,p.x/rad.x);
+    float e=length(p/rad);
+    float scale=length(p)/max(e,1e-3);
+    float depth=.5-.5*sin(th);                 // 1 = front (lower arc)
+    float flow=.25+1.4*pow(.5+.5*cos(th*2.-a*(3.+fr*2.)+fr),6.)+.6*pow(.5+.5*cos(th-a*(2.-fr*3.)),10.);
+    for(int k=0;k<6;k++){
+      float fk=float(k);
+      float off=.018*sin(th*3.+a*(1.+fr)+fk*1.1)+.007*sin(th*5.-a*2.+fk*2.)+(fk-2.5)*.0045;
+      float d=abs(e-1.-off)*scale;
+      float w=px*(1.2+1.8*depth)+.0006;
+      c+=mix(vec3(.45,.12,1.),vec3(.25,.40,1.),.5+.5*sin(th+fk+fr*2.))*exp(-d*d/(w*w))*(.45+.55*depth)*flow*.35;
+      c+=vec3(.35,.1,.9)*exp(-d/(.02))*.012*flow;
+    }
+  }
+  return c*en;
+}
+
+void main(){
+  vec2 fc=gl_FragCoord.xy;
+  vec2 uv=(fc-.5*R)/R.y;
+  float a=TAU*P, b=beat(), kk=kick(), de=dropEnv(), tsd=sinceDrop()*.46875;
+
+  vec3 col=texture(BG,fc/R).rgb;
+  col+=lasers(uv,a);
+  col+=particles(uv+.006*vec2(cos(a),sin(2.*a)),a);
+  col+=orbit(uv,a);
+
+  // anamorphic light sweep through the logo axis on impacts
+  col+=vec3(.35,.4,1.)*exp(-uv.y*uv.y*2600.)*exp(-abs(uv.x)*1.3)*(de*1.6+.08);
+  col+=vec3(.55,.35,1.)*exp(-uv.y*uv.y*240.)*exp(-abs(uv.x)*2.2)*de*.35;
+  // controlled flash
+  float flash=exp(-tsd*10.)*.45+exp(-tsd*2.5)*.05;
+  col+=vec3(.70,.55,1.)*flash*exp(-dot(uv*vec2(.6,1.2),uv*vec2(.6,1.2))*3.);
+
+  // vignette
+  col*=mix(.35,1.,1.-smoothstep(.45,1.15,length(uv*vec2(.75,1.15))));
+
+  // ---- logo mapping ----
+  float Sw=LOGO_FRAC*R.x*4096./3600.;                   // texture width in screen px
+  vec2 tuv=vec2((fc.x-.5*R.x)/Sw+.5,(.5*R.y-fc.y)/(Sw*.25)+.5);
+  float pxT=4096./Sw;                                   // texture px per screen px
+  if(tuv.x>0.&&tuv.x<1.&&tuv.y>0.&&tuv.y<1.){
+    vec4 t=logoTex(tuv);
+    float dist=t.b*t.b*260.;                            // distance outside letters (tex px)
+    float sd=dist/pxT;                                  // ...in screen px (at this res)
+    float scl=R.y/2160.;
+    float bound=1.-smoothstep(.8,.98,t.b);
+    // legibility halo + glow
+    col*=mix(.06,1.,smoothstep(0.,70.*scl,sd));
+    col+=vec3(.50,.16,1.)*exp(-sd/(24.*scl))*(.22+.25*kk+.55*de)*bound;
+    col+=vec3(.22,.30,1.)*exp(-sd/(90.*scl))*(.05+.18*de)*bound;
+
+    // extrusion (3D depth)
+    vec2 ex=vec2(3.,-16.)*scl;                          // screen px, down-right
+    vec2 exT=vec2(-ex.x/Sw,ex.y/(Sw*.25))/12.;
+    float side=0., sk=0.;
+    for(int k=1;k<=12;k++){ float cv=logoTex(tuv+exT*float(k)).r; if(cv>.5&&side<.5){side=1.;sk=float(k)/12.;} }
+    if(side>.5){
+      vec3 sc=mix(vec3(.32,.26,.55),vec3(.03,.01,.08),pow(sk,.5));
+      sc+=vec3(.6,.3,1.)*(.25*kk+.6*de)*(1.-sk);
+      col=mix(col,sc,(1.-t.r));
+    }
+
+    // chrome face
+    float e1=1.5/4096., e2=1.5/1024.;
+    float hx=logoTex(tuv+vec2(e1,0)).g-logoTex(tuv-vec2(e1,0)).g;
+    float hy=logoTex(tuv+vec2(0,e2)).g-logoTex(tuv-vec2(0,e2)).g;
+    vec3 n=normalize(vec3(-hx*9.,hy*9.,1.));
+    vec3 rf=reflect(vec3(0,0,-1),n);
+    float yy=(tuv.y-.5)/(629.5/1024.)+.5;             // 0 top .. 1 bottom of letters
+    float lx=(tuv.x-.5)*4096./3600.+.5;               // 0 left .. 1 right
+    // polished white chrome: bright sky reflection on top, soft horizon, cool steel + reflected energy below
+    vec3 face=mix(vec3(1.35,1.34,1.42),vec3(.88,.86,1.0),smoothstep(.0,.53,yy));
+    face=mix(face,vec3(.40,.34,.62),smoothstep(.52,.585,yy)*(1.-smoothstep(.59,.98,yy))*.85);
+    face=mix(face,vec3(1.05,1.0,1.18),smoothstep(.7,1.02,yy)*.55);
+    vec2 ruv=vec2(fc.x/R.x+rf.x*.04,1.-fc.y/R.y+rf.y*.06);
+    vec3 envR=texture(BG,ruv).rgb;
+    face+=envR*(.25+.35*smoothstep(.5,.9,yy));
+    // bevel: lit rim catches white on top-left, UV on bottom-right, moving speculars
+    float bev=1.-t.g;
+    vec3 Ld=normalize(vec3(-.45,.7,.55));
+    float lit=dot(n,Ld);
+    float ang=atan(rf.y,rf.x);
+    vec3 envC=mix(vec3(.55,.22,1.),vec3(.35,.55,1.),.5+.5*sin(ang+a*2.));
+    vec2 rn=normalize(rf.xy+1e-5);
+    vec2 L1=vec2(cos(a*2.),sin(a*2.)), L2=vec2(cos(-a*3.+2.),sin(-a*3.+2.));
+    float sp=pow(max(dot(rn,L1),0.),18.)+pow(max(dot(rn,L2),0.),30.)*.8;
+    vec3 rim=mix(envC*.55,vec3(1.25,1.22,1.32),smoothstep(-.1,.75,lit))+vec3(1.)*sp*1.3+envC*sp*.6;
+    vec3 chrome=mix(face,rim,smoothstep(.05,.55,bev));
+    // glint sweeping across the letters every 2 bars
+    float sw=mod(b,8.);
+    float pos=mix(-.25,1.3,smoothstep(0.,1.6,sw));
+    float g=exp(-pow((lx+.22*yy-pos)/.022,2.))*(1.-smoothstep(1.4,1.6,sw));
+    chrome+=vec3(.85,.85,1.)*g*1.3+vec3(.6,.4,1.)*exp(-pow((lx+.22*yy-pos)/.09,2.))*.25*(1.-smoothstep(1.4,1.6,sw));
+    // living pulse
+    chrome*=1.15+.10*kk+.30*de;
+    col=mix(col,chrome,t.r);
+  }
+
+  // signature star flares (as in the brand artwork)
+  for(int i=0;i<8;i++){
+    if(i>=NFL) break;
+    vec4 F=FL[i];
+    vec2 sp2=vec2((F.x-.5)*Sw+.5*R.x,.5*R.y-(F.y-.5)*Sw*.25);
+    vec2 d=(fc-sp2)/R.y;
+    float s=F.z;
+    float k2=float(1+i%3);
+    float tw=.35+.65*pow(.5+.5*sin(a*k2*2.+F.w),3.);
+    tw=tw*(1.+.6*kk)+de*1.2;
+    vec3 fcCol=mod(float(i),2.)<.5?vec3(.55,.65,1.):vec3(.80,.50,1.);
+    float core=exp(-length(d)/(.0022*s));
+    float rays=exp(-abs(d.y)/(.0009*s))*pow(max(1.-abs(d.x)/(.11*s),0.),4.)+exp(-abs(d.x)/(.0009*s))*pow(max(1.-abs(d.y)/(.16*s),0.),4.)*1.2;
+    float streak=exp(-abs(d.y)/(.0012*s))*pow(max(1.-abs(d.x)/(.35*s),0.),3.)*.3;
+    col+=(fcCol*(rays+streak)*1.3+vec3(1.)*core*1.6)*tw;
+  }
+
+  col=aces(col*.9);
+  col=pow(col,vec3(1./2.2));
+  col+=(h21(fc+fract(P*97.)*311.)-.5)*(1.6/255.);     // dither: no banding on LED walls
+  o=vec4(col,1.);
+}`;
+
+const cv = document.getElementById('c');
+const params = new URLSearchParams(location.search);
+const OFFLINE = params.has('offline');
+if (OFFLINE) document.body.classList.add('offline');
+const W = +(params.get('w') || 0), H = +(params.get('h') || 0);
+const gl = cv.getContext('webgl2', { antialias: false, preserveDrawingBuffer: true, alpha: false });
+const hasFloat = !!gl.getExtension('EXT_color_buffer_float');
+
+function prog(fs) {
+  const p = gl.createProgram();
+  for (const [t, s] of [[gl.VERTEX_SHADER, VS], [gl.FRAGMENT_SHADER, fs]]) {
+    const sh = gl.createShader(t); gl.shaderSource(sh, s); gl.compileShader(sh);
+    if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(sh));
+    gl.attachShader(p, sh);
+  }
+  gl.bindAttribLocation(p, 0, 'p'); gl.linkProgram(p);
+  if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(p));
+  return p;
+}
+const pBG = prog(FS_BG), pMain = prog(FS_MAIN);
+const vb = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, vb);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+
+let bgTex, fbo, bw = 0, bh = 0;
+function resizeBG(w, h) {
+  if (w === bw && h === bh) return; bw = w; bh = h;
+  if (bgTex) gl.deleteTexture(bgTex);
+  bgTex = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, bgTex);
+  gl.texImage2D(gl.TEXTURE_2D, 0, hasFloat ? gl.RGBA16F : gl.RGBA8, w, h, 0, gl.RGBA, hasFloat ? gl.HALF_FLOAT : gl.UNSIGNED_BYTE, null);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.MIRRORED_REPEAT);
+  fbo = fbo || gl.createFramebuffer(); gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
+  gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, bgTex, 0);
+  gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+}
+
+const logoTex = gl.createTexture();
+const ready = new Promise(res => {
+  const img = new Image();
+  img.onload = () => {
+    gl.bindTexture(gl.TEXTURE_2D, logoTex);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, gl.RGBA, gl.UNSIGNED_BYTE, img);
+    gl.generateMipmap(gl.TEXTURE_2D);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    res();
+  };
+  img.src = LOGO_TEX;
+});
+
+const flArr = new Float32Array(32); FLARES.forEach((f, i) => flArr.set([f[0], f[1], f[2], f[4]], i * 4));
+
+function draw(phase) {
+  const w = cv.width, h = cv.height;
+  resizeBG(Math.ceil(w / 2), Math.ceil(h / 2));
+  gl.useProgram(pBG);
+  gl.bindFramebuffer(gl.FRAMEBUFFER, fbo); gl.viewport(0, 0, bw, bh);
+  gl.uniform2f(gl.getUniformLocation(pBG, 'R'), bw, bh);
+  gl.uniform1f(gl.getUniformLocation(pBG, 'P'), phase);
+  gl.drawArrays(gl.TRIANGLES, 0, 3);
+  gl.bindFramebuffer(gl.FRAMEBUFFER, null); gl.viewport(0, 0, w, h);
+  gl.useProgram(pMain);
+  gl.uniform2f(gl.getUniformLocation(pMain, 'R'), w, h);
+  gl.uniform1f(gl.getUniformLocation(pMain, 'P'), phase);
+  gl.uniform4fv(gl.getUniformLocation(pMain, 'FL'), flArr);
+  gl.uniform1i(gl.getUniformLocation(pMain, 'NFL'), FLARES.length);
+  gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, bgTex);
+  gl.uniform1i(gl.getUniformLocation(pMain, 'BG'), 0);
+  gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, logoTex);
+  gl.uniform1i(gl.getUniformLocation(pMain, 'LOGO'), 1);
+  gl.drawArrays(gl.TRIANGLES, 0, 3);
+}
+
+if (OFFLINE) {
+  cv.width = W; cv.height = H;
+  const buf = new Uint8Array(W * H * 4);
+  window.renderFrame = async (phase, postUrl) => {
+    await ready; draw(phase);
+    gl.readPixels(0, 0, W, H, gl.RGBA, gl.UNSIGNED_BYTE, buf);
+    const r = await fetch(postUrl, { method: 'POST', body: buf });
+    return r.status;
+  };
+  window.renderReady = ready.then(() => true);
+} else {
+  function fit() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const r = cv.getBoundingClientRect();
+    cv.width = Math.round(r.width * dpr); cv.height = Math.round(r.height * dpr);
+  }
+  addEventListener('resize', fit); fit();
+  const t0 = performance.now(), tEl = document.getElementById('t');
+  ready.then(function loop() {
+    const s = ((performance.now() - t0) / 1000) % LOOP;
+    draw(s / LOOP); tEl.textContent = s.toFixed(2);
+    requestAnimationFrame(loop);
+  });
+  cv.addEventListener('click', () => { document.fullscreenElement ? document.exitFullscreen() : cv.requestFullscreen?.(); });
+}
+</script>
+</body>
+</html>
