@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Fiesta del Semáforo · Blendded</title>
+<style>
+  @font-face { font-family: Unb; font-weight: 800; src: url(../02_assets/generados/fuentes/unbounded-latin-800-normal.woff2); }
+  @font-face { font-family: Unb; font-weight: 900; src: url(../02_assets/generados/fuentes/unbounded-latin-900-normal.woff2); }
+  @font-face { font-family: Bebas; src: url(../02_assets/generados/fuentes/bebas-neue-latin-400-normal.woff2); }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1080px; height: 1350px; overflow: hidden; background: #000; }
+  .poster { position: relative; width: 1080px; height: 1350px; overflow: hidden; color: #fff; }
+
+  .photo { position: absolute; inset: 0; background: url(BG) center / cover no-repeat; }
+  /* sombras para que el texto respire, sin que se note */
+  .shade-top { position: absolute; left: 0; right: 0; top: 0; height: 300px;
+    background: linear-gradient(180deg, rgba(0,0,0,.78), rgba(0,0,0,.35) 60%, transparent); }
+  .shade-bot { position: absolute; left: 0; right: 0; bottom: 0; height: 560px;
+    background: linear-gradient(0deg, rgba(0,0,0,.92) 0%, rgba(0,0,0,.7) 45%, transparent); }
+
+  .organizer { position: absolute; left: 0; right: 0; top: 44px; text-align: center; }
+  .organizer img { width: 560px; filter: drop-shadow(0 0 18px rgba(170,60,255,.55)) drop-shadow(0 6px 12px rgba(0,0,0,.6)); }
+  .organizer .pres { font-family: Bebas; font-size: 26px; letter-spacing: .6em; padding-left: .6em; opacity: .85; margin-top: 2px; }
+
+  .date {
+    position: absolute; right: 64px; top: 470px; text-align: right;
+    font-family: Unb; font-weight: 900; font-size: 190px; line-height: .82; letter-spacing: -.04em;
+    text-shadow: 0 0 2px rgba(255,255,255,.6), 0 10px 40px rgba(0,0,0,.7);
+  }
+  .date .slash { display: block; font-size: 190px; }
+  .date small { display: block; font-family: Bebas; font-weight: 400; font-size: 30px; letter-spacing: .45em;
+    margin: 0 -.45em 18px 0; line-height: 1; opacity: .85; }
+
+  .title { position: absolute; left: 60px; right: 60px; bottom: 210px; text-align: center; }
+  .title .l1 { font-family: Unb; font-weight: 800; font-size: 54px; letter-spacing: .22em; padding-left: .22em; line-height: 1; }
+  .title .l2 { font-family: Unb; font-weight: 900; font-size: 132px; line-height: 1.02; letter-spacing: -.02em; margin-top: 6px;
+    text-shadow: 0 0 1px #fff, 0 0 30px rgba(255,255,255,.25); }
+
+  .bar { position: absolute; left: 50%; bottom: 168px; width: 150px; height: 6px; margin-left: -75px; display: flex; gap: 6px; }
+  .bar i { flex: 1; border-radius: 3px; }
+  .bar i:nth-child(1) { background: #ff2a3a; box-shadow: 0 0 12px #ff2a3a; }
+  .bar i:nth-child(2) { background: #ffb21a; box-shadow: 0 0 12px #ffb21a; }
+  .bar i:nth-child(3) { background: #19ff6e; box-shadow: 0 0 12px #19ff6e; }
+
+  .venue { position: absolute; left: 0; right: 0; bottom: 52px; text-align: center; }
+  .venue img { width: 330px; filter: drop-shadow(0 0 14px rgba(230,227,3,.35)); }
+</style>
+</head>
+<body>
+<div class="poster">
+  <div class="photo"></div>
+  <div class="shade-top"></div>
+  <div class="shade-bot"></div>
+
+  <div class="organizer">
+    <img src="../02_assets/generados/logo-blendded_recorte.png" alt="Blendded">
+    <div class="pres">PRESENTA</div>
+  </div>
+
+  <div class="date"><small>DICIEMBRE</small>21<span class="slash">/12</span></div>
+
+  <div class="title">
+    <div class="l1">FIESTA DEL</div>
+    <div class="l2">SEMÁFORO</div>
+  </div>
+  <div class="bar"><i></i><i></i><i></i></div>
+
+  <div class="venue"><img src="../02_assets/generados/logo-frenesi_recorte.png" alt="Frenesí"></div>
+</div>
+</body>
+</html>
