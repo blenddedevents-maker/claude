@@ -10,6 +10,11 @@ im = Image.open(src).convert("RGB")
 W, H = im.size
 a = np.asarray(im).astype(np.float32) / 255.0
 
+# --- corrección de verde: el semáforo verde tiende a cian, se baja el azul
+r_, g_, b_ = a[..., 0], a[..., 1], a[..., 2]
+cyan = np.clip((np.minimum(g_, b_) - r_ - 0.15) * 3, 0, 1)
+a[..., 2] = b_ * (1 - 0.55 * cyan)
+
 # --- bloom: solo zonas muy brillantes y saturadas (las luces)
 lum = a.max(axis=2)
 sat = lum - a.min(axis=2)
