@@ -300,23 +300,23 @@ def build(src, out, collect=None):
         comp(wire.resize((W * SS, H * SS)), (25, 16, 32), 0.9, name='xmas')
         glow = bulbs.filter(ImageFilter.GaussianBlur(26))
         halo = bulbs.filter(ImageFilter.GaussianBlur(7))
-        add_light(glow, 1.2)
-        add_light(halo, 0.9)
-        add_light(bulbs, 0.8)
+        add_light(glow, 0.7)
+        add_light(halo, 0.6)
+        add_light(bulbs, 0.6)
 
         # nieve: copos pequeños nítidos + copos grandes desenfocados (bokeh)
         def avoid(x, y):  # menos nieve sobre fechas y contacto para que se lean
             return (130 < y < 450 and 260 < x < 820) or (1540 < y < 1720 and 200 < x < 880)
         snow = Image.new("L", (W, H), 0); ds = ImageDraw.Draw(snow)
-        for _ in range(190):
+        for _ in range(100):
             x, y = rng.uniform(0, W), rng.uniform(0, H)
             if avoid(x, y) and rng.random() < 0.85:
                 continue
             r = rng.uniform(1.0, 2.6)
-            ds.ellipse((x - r, y - r, x + r, y + r), fill=int(rng.uniform(110, 200)))
+            ds.ellipse((x - r, y - r, x + r, y + r), fill=int(rng.uniform(90, 160)))
         snow = snow.filter(ImageFilter.GaussianBlur(0.8))
         big = Image.new("L", (W, H), 0); dbg = ImageDraw.Draw(big)
-        for _ in range(12):
+        for _ in range(6):
             x, y = rng.uniform(0, W), rng.uniform(0, H)
             if avoid(x, y):
                 continue
@@ -332,7 +332,7 @@ def build(src, out, collect=None):
 
         # destellos tipo estrella
         spark = Image.new("L", (W, H), 0); dsp = ImageDraw.Draw(spark)
-        for x, y, s in ((300, 1005, 26), (835, 520, 30)):
+        for x, y, s in ((300, 1005, 22),):
             dsp.line((x - s, y, x + s, y), fill=255, width=2)
             dsp.line((x, y - s, x, y + s), fill=255, width=2)
             dsp.line((x - s * .35, y - s * .35, x + s * .35, y + s * .35), fill=200, width=1)
@@ -346,10 +346,10 @@ def build(src, out, collect=None):
 
         # etiqueta "edición navideña" bajo TOUR 2026
         L = text_layer(); d = ImageDraw.Draw(L)
-        fi = font("PlayfairItalic.ttf", 26 * SS, "Bold")
+        fi = font("PlayfairItalic.ttf", 23 * SS, "SemiBold")
         tw = d.textlength(NAVIDAD, font=fi)
         d.text((1030 * SS - tw, 1082 * SS), NAVIDAD, font=fi, fill=255)
-        comp(L, (120, 20, 55), 0.8, name='xmas')
+        comp(L, (120, 20, 55), 0.65, name='xmas')
         comp(L, (255, 150, 190), 0.35, shift=4, name='xmas')
 
     # ---------- grano + scanlines suaves ----------
