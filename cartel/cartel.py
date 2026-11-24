@@ -25,6 +25,7 @@ MES_1, FECHAS_1 = "DICIEMBRE", [
 MES_2, FECHAS_2 = "", []   # segundo mes opcional (columna derecha)
 PIE = "más fechas por confirmar"
 CONTACTO = "CONTACTO: +34 624 609 226"
+NAVIDAD = "edición navideña"   # pon "" para quitar el toque navideño
 LETRA_PEQUENA = ("ESTO SOLO ES EL PRINCIPIO · CADA NOCHE UNA HISTORIA DISTINTA · "
                  "NOS VEMOS DELANTE DEL ESCENARIO · GRACIAS POR ESTAR AQUÍ DESDE EL PRIMER DÍA")
 # -------------------------------------------------------------------
@@ -270,6 +271,87 @@ def build(src, out, collect=None):
     tw = d.textlength(NOMBRE[0][0], font=fb)
     d.text((bx + 35 * SS - tw / 2, by + 16 * SS), NOMBRE[0][0], font=fb, fill=255)
     comp(L, (245, 242, 250), 0.9, name='badge')
+
+    # ---------- toque navideño ----------
+    if NAVIDAD:
+        def add_light(img_rgb, strength=1.0):
+            """Suma luz en modo 'screen' sobre el lienzo."""
+            nonlocal canvas
+            c = np.asarray(canvas, np.float32) / 255
+            l = np.asarray(img_rgb, np.float32) / 255 * strength
+            canvas = Image.fromarray((np.clip(screen(c, l), 0, 1) * 255).astype(np.uint8))
+
+        # guirnalda de luces colgando arriba (dos curvas)
+        wire = Image.new("L", (W, H), 0); dw = ImageDraw.Draw(wire)
+        bulbs = Image.new("RGB", (W, H), 0); db = ImageDraw.Draw(bulbs)
+        cols = [(255, 196, 110), (255, 70, 100), (255, 140, 210), (200, 150, 255)]
+        k = 0
+        for x0, x1, sag, yb in ((-40, 560, 95, 18), (520, 1120, 80, 10)):
+            pts = []
+            for i in range(61):
+                u = i / 60
+                pts.append((x0 + (x1 - x0) * u, yb + sag * 4 * u * (1 - u)))
+            dw.line(pts, fill=255, width=3)
+            for i in range(3, 60, 5):
+                x, y = pts[i]
+                col = cols[k % len(cols)]; k += 1
+                dw.line((x, y, x, y + 10), fill=255, width=3)
+                db.ellipse((x - 7, y + 9, x + 7, y + 29), fill=col)
+        comp(wire.resize((W * SS, H * SS)), (25, 16, 32), 0.9, name='xmas')
+        glow = bulbs.filter(ImageFilter.GaussianBlur(26))
+        halo = bulbs.filter(ImageFilter.GaussianBlur(7))
+        add_light(glow, 2.2)
+        add_light(halo, 1.4)
+        add_light(bulbs, 1.0)
+
+        # nieve: copos pequeños nítidos + copos grandes desenfocados (bokeh)
+        def avoid(x, y):  # menos nieve sobre fechas y contacto para que se lean
+            return (130 < y < 450 and 260 < x < 820) or (1540 < y < 1720 and 200 < x < 880)
+        snow = Image.new("L", (W, H), 0); ds = ImageDraw.Draw(snow)
+        for _ in range(520):
+            x, y = rng.uniform(0, W), rng.uniform(0, H)
+            if avoid(x, y) and rng.random() < 0.85:
+                continue
+            r = rng.uniform(1.2, 3.6)
+            ds.ellipse((x - r, y - r, x + r, y + r), fill=int(rng.uniform(150, 255)))
+        snow = snow.filter(ImageFilter.GaussianBlur(0.8))
+        big = Image.new("L", (W, H), 0); dbg = ImageDraw.Draw(big)
+        for _ in range(45):
+            x, y = rng.uniform(0, W), rng.uniform(0, H)
+            if avoid(x, y):
+                continue
+            r = rng.uniform(9, 24)
+            dbg.ellipse((x - r, y - r, x + r, y + r), fill=int(rng.uniform(60, 140)))
+        big = big.filter(ImageFilter.GaussianBlur(7))
+        sm = np.asarray(snow, np.float32) / 255
+        sm = np.maximum(sm, motion_blur(sm, 6) * 0.8)  # leve estela, como el resto
+        bm = np.asarray(big, np.float32) / 255
+        snow_rgb = np.clip(sm[..., None] * np.array([1, 0.98, 1.0]) +
+                           bm[..., None] * np.array([0.95, 0.9, 1.0]), 0, 1)
+        add_light(Image.fromarray((snow_rgb * 255).astype(np.uint8)), 1.0)
+
+        # destellos tipo estrella
+        spark = Image.new("L", (W, H), 0); dsp = ImageDraw.Draw(spark)
+        for x, y, s in ((300, 1005, 34), (835, 520, 46), (1000, 300, 30),
+                        (120, 700, 26), (560, 1290, 22), (210, 160, 28)):
+            dsp.line((x - s, y, x + s, y), fill=255, width=2)
+            dsp.line((x, y - s, x, y + s), fill=255, width=2)
+            dsp.line((x - s * .35, y - s * .35, x + s * .35, y + s * .35), fill=200, width=1)
+            dsp.line((x - s * .35, y + s * .35, x + s * .35, y - s * .35), fill=200, width=1)
+            dsp.ellipse((x - 3, y - 3, x + 3, y + 3), fill=255)
+        sp = spark.filter(ImageFilter.GaussianBlur(1.2))
+        spg = spark.filter(ImageFilter.GaussianBlur(9))
+        tint = np.array([1.0, 0.92, 0.85], np.float32)
+        s_arr = (np.asarray(sp, np.float32) + np.asarray(spg, np.float32) * 1.5) / 255
+        add_light(Image.fromarray((np.clip(s_arr[..., None] * tint, 0, 1) * 255).astype(np.uint8)), 1.0)
+
+        # etiqueta "edición navideña" bajo TOUR 2026
+        L = text_layer(); d = ImageDraw.Draw(L)
+        fi = font("PlayfairItalic.ttf", 30 * SS, "Bold")
+        tw = d.textlength(NAVIDAD, font=fi)
+        d.text((1030 * SS - tw, 1082 * SS), NAVIDAD, font=fi, fill=255)
+        comp(L, (120, 20, 55), 0.95, name='xmas')
+        comp(L, (255, 150, 190), 0.35, shift=4, name='xmas')
 
     # ---------- grano + scanlines suaves ----------
     c = np.asarray(canvas, np.float32) / 255
