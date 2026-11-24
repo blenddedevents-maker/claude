@@ -281,29 +281,6 @@ def build(src, out, collect=None):
             l = np.asarray(img_rgb, np.float32) / 255 * strength
             canvas = Image.fromarray((np.clip(screen(c, l), 0, 1) * 255).astype(np.uint8))
 
-        # guirnalda de luces colgando arriba (dos curvas)
-        wire = Image.new("L", (W, H), 0); dw = ImageDraw.Draw(wire)
-        bulbs = Image.new("RGB", (W, H), 0); db = ImageDraw.Draw(bulbs)
-        cols = [(255, 196, 110), (255, 70, 100), (255, 140, 210), (200, 150, 255)]
-        k = 0
-        for x0, x1, sag, yb in ((-40, 560, 95, 18), (520, 1120, 80, 10)):
-            pts = []
-            for i in range(61):
-                u = i / 60
-                pts.append((x0 + (x1 - x0) * u, yb + sag * 4 * u * (1 - u)))
-            dw.line(pts, fill=255, width=3)
-            for i in range(3, 60, 5):
-                x, y = pts[i]
-                col = cols[k % len(cols)]; k += 1
-                dw.line((x, y, x, y + 10), fill=255, width=3)
-                db.ellipse((x - 7, y + 9, x + 7, y + 29), fill=col)
-        comp(wire.resize((W * SS, H * SS)), (25, 16, 32), 0.9, name='xmas')
-        glow = bulbs.filter(ImageFilter.GaussianBlur(26))
-        halo = bulbs.filter(ImageFilter.GaussianBlur(7))
-        add_light(glow, 0.7)
-        add_light(halo, 0.6)
-        add_light(bulbs, 0.6)
-
         # nieve: copos pequeños nítidos + copos grandes desenfocados (bokeh)
         def avoid(x, y):  # menos nieve sobre fechas y contacto para que se lean
             return (130 < y < 450 and 260 < x < 820) or (1540 < y < 1720 and 200 < x < 880)
