@@ -13,8 +13,8 @@ fs.mkdirSync(OUT, { recursive: true });
 
 const ff = spawn('ffmpeg', ['-y', '-hide_banner', '-loglevel', 'error',
   '-f', 'rawvideo', '-pix_fmt', 'rgba', '-s', `${W}x${H}`, '-r', `${FPS}`, '-i', '-',
-  '-vf', 'vflip', '-c:v', 'ffv1', '-level', '3', '-pix_fmt', 'bgr0', '-slices', '16', '-g', '1',
-  path.join(OUT, `master_${String(first).padStart(4, '0')}.mkv`)], { stdio: ['pipe', 'inherit', 'inherit'] });
+  '-vf', 'vflip', '-c:v', 'ffv1', '-level', '3', '-pix_fmt', 'bgr0', '-slices', '16', '-g', '1', '-threads', '2',
+  process.env.OUTFILE || path.join(OUT, `master_${String(first).padStart(4, '0')}.mkv`)], { stdio: ['pipe', 'inherit', 'inherit'] });
 
 let pending = null;
 const server = http.createServer((req, res) => {
