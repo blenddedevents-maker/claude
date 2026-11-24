@@ -18,6 +18,7 @@ TITULO_FONDO = ("PRÓXIMAS", "FECHAS")
 MES_1, FECHAS_1 = "DICIEMBRE", [
     ("05/12", "OSCARS PUB, VINARÒS", False),
     ("05/12", "FRENESÍ CLUB, VINARÒS", False),
+    ("18/12", "OSCARS PUB, VINARÒS", False),
     ("19/12", "KINTOS, ULLDECONA", False),
     ("24/12", "OSCARS PUB, VINARÒS", False),
 ]
