@@ -19,7 +19,7 @@ MES_1, FECHAS_1 = "DICIEMBRE", [
     ("05/12", "OSCARS PUB, VINARÒS", False),
     ("05/12", "FRENESÍ CLUB, VINARÒS", False),
     ("19/12", "KINTOS, ULLDECONA", False),
-    ("25/12", "OSCARS PUB, VINARÒS", False),
+    ("24/12", "OSCARS PUB, VINARÒS", False),
 ]
 MES_2, FECHAS_2 = "", []   # segundo mes opcional (columna derecha)
 PIE = "más fechas por confirmar"
