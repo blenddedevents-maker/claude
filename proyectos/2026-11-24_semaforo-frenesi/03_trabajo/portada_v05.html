@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Fiesta del Semáforo · v05</title>
+<style>
+  @font-face { font-family: Unb; font-weight: 900; src: url(../02_assets/generados/fuentes/unbounded-latin-900-normal.woff2); }
+  @font-face { font-family: Bebas; src: url(../02_assets/generados/fuentes/bebas-neue-latin-400-normal.woff2); }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1080px; height: 1350px; overflow: hidden; background: #000; }
+  .poster { position: relative; width: 1080px; height: 1350px; overflow: hidden; color: #fff; isolation: isolate; }
+  .layer { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .grain { mix-blend-mode: overlay; opacity: .35; }
+
+  .shade-t { position: absolute; left: 0; right: 0; top: 0; height: 200px; background: linear-gradient(180deg, rgba(0,0,0,.55), transparent); }
+  .shade-b { position: absolute; left: 0; right: 0; bottom: 0; height: 240px; background: linear-gradient(0deg, rgba(0,0,0,.75), transparent); }
+  .org { position: absolute; left: 0; right: 0; top: 26px; text-align: center; }
+  .org img { width: 420px; filter: drop-shadow(0 0 18px rgba(165,60,255,.55)) drop-shadow(0 4px 10px rgba(0,0,0,.8)); }
+
+  .date { position: absolute; left: 60px; bottom: 52px; font-family: Unb; font-weight: 900; font-size: 84px; line-height: .9; letter-spacing: -.03em;
+          text-shadow: 0 4px 18px rgba(0,0,0,.6); }
+  .date small { display: block; font-family: Bebas; font-size: 26px; letter-spacing: .45em; opacity: .85; margin-bottom: 10px; }
+  .venue { position: absolute; right: 60px; bottom: 60px; text-align: right; }
+  .venue small { display: block; font-family: Bebas; font-size: 26px; letter-spacing: .45em; margin-right: -.45em; opacity: .85; margin-bottom: 14px; }
+  .venue img { width: 290px; display: block; filter: drop-shadow(0 0 14px rgba(230,227,3,.3)) drop-shadow(0 4px 10px rgba(0,0,0,.7)); }
+</style>
+</head>
+<body>
+<div class="poster">
+  <img class="layer" src="../02_assets/generados/semaforo-final_v05.png">
+  <div class="shade-t"></div><div class="shade-b"></div>
+  <div class="org"><img src="../02_assets/generados/logo-blendded_recorte.png" alt="Blendded"></div>
+  <div class="date"><small>DICIEMBRE</small>21/12</div>
+  <div class="venue"><small>EN</small><img src="../02_assets/generados/logo-frenesi_recorte.png" alt="Frenesí"></div>
+  <img class="layer grain" src="../02_assets/generados/capas_v03/capa_grano.png">
+</div>
+</body>
+</html>
