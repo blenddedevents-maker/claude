@@ -24,6 +24,7 @@ MES_1, FECHAS_1 = "DICIEMBRE", [
 ]
 MES_2, FECHAS_2 = "", []   # segundo mes opcional (columna derecha)
 PIE = "más fechas por confirmar"
+CONTACTO = "CONTACTO: +34 624 609 226"
 LETRA_PEQUENA = ("ESTO SOLO ES EL PRINCIPIO · CADA NOCHE UNA HISTORIA DISTINTA · "
                  "NOS VEMOS DELANTE DEL ESCENARIO · GRACIAS POR ESTAR AQUÍ DESDE EL PRIMER DÍA")
 # -------------------------------------------------------------------
@@ -235,6 +236,13 @@ def build(src, out, collect=None):
     tw = d.textlength(PIE, font=fp)
     d.text(((W * SS - tw) / 2, 1560 * SS), PIE, font=fp, fill=255)
     comp(L, (238, 234, 246), 0.9, smear=40, smear_amt=0.5, name='pie')
+
+    # número de contacto
+    L = text_layer(); d = ImageDraw.Draw(L)
+    fc = font("Oswald.ttf", 34 * SS, "SemiBold")
+    tw = d.textlength(CONTACTO, font=fc)
+    d.text(((W * SS - tw) / 2, 1606 * SS), CONTACTO, font=fc, fill=255)
+    comp(L, (250, 248, 255), 0.97, smear=14, smear_amt=0.3, name='contacto')
 
     # letra pequeña espaciada
     L = text_layer(); d = ImageDraw.Draw(L)

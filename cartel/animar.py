@@ -115,7 +115,7 @@ def main(src, out):
                 jit = int(rng.integers(-25, 25)) if (t < t0 + 0.45 or g) else 0
                 c = over(c, np.roll(m, jit, axis=1) * a * flick, col)
 
-        for name, t0 in (("pie", 3.2), ("small", 3.5), ("badge", 3.7)):
+        for name, t0 in (("pie", 3.2), ("contacto", 3.35), ("small", 3.5), ("badge", 3.7)):
             a = ramp(t, t0, 0.6)
             if a > 0:
                 for m, col in layers[name]:
