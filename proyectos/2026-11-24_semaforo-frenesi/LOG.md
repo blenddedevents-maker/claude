@@ -14,3 +14,6 @@
 | 2026-11-24 | decisión | v04 "realista como la referencia": semáforo anclado a una persiana metálica, foto de cerca con gran angular y flash directo (sombra dura), título pintado en la persiana con chorreones (textura sobre la chapa), revelado tipo foto (claridad, sombras azuladas, aberración cromática, grano) |
 | 2026-11-24 | instalación | fonttools + brotli (conversión de fuentes woff2 → ttf para PIL/Blender) |
 | 2026-11-24 | versión | v04: 04_salidas/borradores/fiesta-semaforo-blendded_ig-4x5_v04.png/.jpg (2160x2700). Fuentes: rotulo_textura.py → semaforo_3d_v04.py → postpro_v04.py → portada_v04.html |
+| 2026-11-24 | decisión | v05 "full publicitario": título en letras 3D cromadas (SEMÁFORO en Unbounded Black + "Fiesta del" en Playfair Display Black Italic) detrás del semáforo, cromo tipo Y2K (cielo/horizonte/violeta, a juego con el logo Blendded) con light linking para no teñir la persiana, destellos de estrella en post. Sin datos extra (elección del usuario) |
+| 2026-11-24 | instalación | Fuente @fontsource/playfair-display (800/900 italic) convertida a TTF |
+| 2026-11-24 | versión | v05: 04_salidas/borradores/fiesta-semaforo-blendded_ig-4x5_v05.png/.jpg (2160x2700). Fuentes: semaforo_3d_v05.py → postpro_v04.py → destellos.py → portada_v05.html |
