@@ -10,3 +10,4 @@
 | 2026-11-25 | decisión | Transición: B entra a 15,71 s (pad de intro) con filtro paso alto de 900 Hz que se va abriendo y volumen subiendo; bass swap en el Fa final (20,38 s); echo-out ping-pong de 3/4 de beat en la última nota de A |
 | 2026-11-25 | decisión | Máster: limitador a −1 dBTP, ≈ −10,5 LUFS integrado. Los WAV no se suben al repo por tamaño (se regeneran con `03_trabajo/mezcla.py`) |
 | 2026-11-25 | versión | v01 → `04_salidas/borradores/mezcla-dj_25-11-2026_a_las-munequitas_v01.mp3` |
+| 2026-11-25 | versión | v01 en vídeo → `mezcla-dj_25-11-2026_a_las-munequitas_v01.mp4` (1280x720, H.264 + AAC 320k, forma de onda animada con FFmpeg showwaves) |
