@@ -22,3 +22,6 @@
 | 2026-11-26 | versión | v04: `reel-subtitulos-transicion_v04.mp4` (22,5 s). Subtítulos en `03_trabajo/subtitulos_v04.ass` |
 | 2026-11-26 | decisión | Feedback: cortar el clip 3 antes de que el usuario vaya hacia la cámara. Nuevo final a 7,12 s del original (justo al acabar «antiguo», cuya voz termina a ~7,20 s), con fundido de audio de 0,06 s. El clip 3 pasa de 4,8 s a 4,27 s |
 | 2026-11-26 | versión | v05: `reel-subtitulos-transicion_v05.mp4` (22,0 s). Subtítulos desplazados en `03_trabajo/subtitulos_v05.ass` |
+| 2026-11-26 | decisión | v06: el audio de la música del clip 4 se sustituye por el WAV limpio `cancion_para-reel.wav` (24 bits, 44,1 kHz). Sincronía por correlación cruzada con el audio del vídeo: desfase de +0,315 s (estable entre 0,30 y 0,32 s a lo largo del clip, sin deriva). El audio original del clip 4 solo se conserva en 0–1,10 s («Vamos a hacerlo») |
+| 2026-11-26 | decisión | Mezcla equilibrada: voces y concierto a −16 LUFS (+10,4 / +11,2 / +8,4 / +7,1 dB), canción a −14 LUFS (−3,5 dB), limitador final a −1 dB. Antes, voces a −27 LUFS frente a la canción a −10,5 LUFS |
+| 2026-11-26 | versión | v06: `reel-subtitulos-transicion_v06.mp4` (22,0 s, AAC 256k). Golpe del beat y golpe de zoom coinciden en 13,20 s (fotograma 396) |
