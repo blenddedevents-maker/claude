@@ -63,3 +63,5 @@
 | 2026-11-26 | decisión | Marcas de agua del trozo de Amador: mismo método que en la v14 (delogo hasta el corte de plano a 0,163 s; parche del segundo 5,1 en el dormitorio; recorte inferior). Filtro en `03_trabajo/filtro-meme-espartaco_v15.txt`. Audio a 0 dB (ya a −14 LUFS) |
 | 2026-11-26 | decisión | Subtítulos: «HACERLO» termina en el corte (12,72 s) y los posteriores se desplazan +0,093 s respecto a la v13 (cortes reales medidos) |
 | 2026-11-26 | versión | v15: `reel-subtitulos-transicion_v15.mp4` (50,7 s). Subtítulos en `03_trabajo/subtitulos_v15.ass` |
+| 2026-11-26 | decisión | Feedback: el trozo de Amador era demasiado corto. Ahora va de 3,20 a 4,30 s del original (1,1 s, 33 fotogramas): saca y lanza el cinturón con el «¡Eeeeh!», «¡Espartaco!» y el golpe. El corte final sigue en el golpe. Filtro en `03_trabajo/filtro-meme-espartaco_v16.txt` (delogo hasta 0,833 s; parche desde 0,833 s) |
+| 2026-11-26 | versión | v16: `reel-subtitulos-transicion_v16.mp4` (51,4 s). Subtítulos posteriores +0,667 s en `03_trabajo/subtitulos_v16.ass` |
