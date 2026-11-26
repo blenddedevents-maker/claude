@@ -30,3 +30,5 @@
 | 2026-11-26 | decisión | La voz de Lucho no suena en el audio del clip (la escuchaba con auriculares), así que se coloca justo después de «Primero la voz»: el WAV empieza a 2,25 s del original y termina antes de tapar la cámara. La onda y el audio salen del mismo WAV y la misma referencia de tiempo, así que van exactamente sincronizados |
 | 2026-11-26 | decisión | Audio del clip 5: voz del usuario +7,4 dB (−16 LUFS), voz de Lucho −2,3 dB (−14 LUFS) |
 | 2026-11-26 | versión | v07: `reel-subtitulos-transicion_v07.mp4` (29,1 s). Subtítulos en `03_trabajo/subtitulos_v07.ass` |
+| 2026-11-26 | decisión | Feedback: quitar del último clip la mano tapando la cámara al inicio; empezar directamente cuando habla. El clip 5 ahora entra a 1,53 s del original (mano ya fuera, voz a 1,55 s) con un corte limpio desde el clip del teclado. Onda, voz de Lucho y subtítulos desplazados igual (sin cambiar su sincronía) |
+| 2026-11-26 | versión | v08: `reel-subtitulos-transicion_v08.mp4` (28,2 s). Subtítulos en `03_trabajo/subtitulos_v08.ass` |
