@@ -12,3 +12,6 @@
 | 2026-11-26 | decisión | Etalonaje del estudio: el mismo filtro del primer vídeo más una igualación previa (temperatura más cálida, menos verde en medios, -3,5 % de brillo, +7 % de contraste, +8 % de saturación) para casar con el primer clip. En `03_trabajo/filtro-etalonaje-estudio_v02.txt` |
 | 2026-11-26 | decisión | Subtítulos del clip 3: «Pero ¿qué pasaría si lo hiciésemos en reguetón antiguo?» (grafía RAE: reguetón) |
 | 2026-11-26 | versión | v02: `reel-subtitulos-transicion_v02.mp4` (12,77 s). Subtítulos en `03_trabajo/subtitulos_v02.ass` |
+| 2026-11-26 | decisión | Feedback: color demasiado exagerado → versión suave: original + 40 % de la corrección (blend normal, opacidad 0,4) en los dos clips del usuario |
+| 2026-11-26 | decisión | El clip 1 ahora sale del original sin etalonar (tramo 3,40–6,10 s, localizado por correlación de audio y comprobado visualmente), en vez del archivo ya etalonado |
+| 2026-11-26 | versión | v03: `reel-subtitulos-transicion_v03.mp4` (12,77 s). Filtros en `03_trabajo/filtro-suave-*_v03.txt` |
