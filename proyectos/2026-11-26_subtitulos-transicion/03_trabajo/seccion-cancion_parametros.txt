@@ -1,0 +1,10 @@
+Sección canción final (τ = tiempo local de la sección; song = τ − 1.88)
+tj (yo-todo-junto.mov, crop 884:1572:0:175): τ 0–0.2
+toma0: τ 0.2–5.76 (src = τ − 0.16). Su fundido a negro propio (src 1,77–1,92) se elimina: src 0,04–1,767 + último fotograma congelado 0,167 s + src 1,933–5,6
+toma1: τ 5.76–13.295 (src = τ − 5.76; canción 3.88)
+toma2: τ 13.295–23.395 (src = τ − 13.295; canción 11.415; +1 fotograma clonado al final)
+toma3: τ 23.395–33.495 (src = τ − 23.395; canción 21.515)
+toma4: τ 33.495–42.0667 (src = τ − 33.495; canción 31.615)
+Tomas: crop 2156:3832:2:420 (área útil sin las franjas negras propias) → 1080×1920 + filtro suave del estudio
+Onda (onda-final-daw_referencia.mov): grab_t = τ + 0.717 (inicio del audio en el centro de la pantalla a 2,597 s de la grabación; 356,7 px/s); entra a τ 1.6
+Audio: τ 0–0.2 tj (+9.1 dB), τ 0.2–1.88 toma0 (+9.3 dB), canción desde τ 1.88 (−6 dB → −14 LUFS); fundido final 41.5–42.07 (canción 40.15 = inicio de compás)
