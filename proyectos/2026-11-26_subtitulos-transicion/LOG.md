@@ -53,3 +53,5 @@
 | 2026-11-26 | decisión | v12: el clip «Y todo junto así quedaría» se añade al final del reel. El clip de las baterías se corta a 8,9 s (después de mirar a cámara), con corte directo y sin fundido. Del clip nuevo se recortan las franjas negras de la grabación de pantalla (886×1574 útil, ya en 9:16 → crop 884:1572:0:175 → 1080×1920), con el color suave del estudio (mismo filtro que los clips 5–7), +9,1 dB (−16 LUFS) y fundido a negro final de 0,37 s |
 | 2026-11-26 | decisión | Subtítulos del clip 8 colocados en el corte real (49,60 s) |
 | 2026-11-26 | versión | v12: `reel-subtitulos-transicion_v12.mp4` (51,5 s). Subtítulos en `03_trabajo/subtitulos_v12.ass` |
+| 2026-11-26 | decisión | Feedback: que no se vea el gesto de apagar la cámara al final de las baterías. El clip 7 se corta a 8,0 s del original (el brazo empieza a estirarse a 8,05 s). La barra de batería sale antes (7,64 s, 0,30 s) para desaparecer antes del corte. Subtítulos del clip 8 adelantados 0,9 s (corte real a 48,70 s) |
+| 2026-11-26 | versión | v13: `reel-subtitulos-transicion_v13.mp4` (50,6 s). Subtítulos en `03_trabajo/subtitulos_v13.ass` |
