@@ -1,0 +1,1 @@
+clip6: crop=1180:2092:0:232 → zoom tight 922x1640 @ (130,98) a wide, easing smoothstep t=0.67–1.35 s; Z=(1.17073-0.25295*(st(0\,clip((t-0.67)/0.68\,0\,1))*0+ld(0)*ld(0)*(3-2*ld(0))))
