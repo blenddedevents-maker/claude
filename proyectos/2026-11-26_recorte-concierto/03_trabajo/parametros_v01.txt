@@ -1,0 +1,1 @@
+recorte: -ss 7 -t 5 | video: delogo=x=488:y=768:w=86:h=104 | audio: afade in 0.15s / out 0.3s
