@@ -1,0 +1,38 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 1080
+PlayResY: 1920
+WrapStyle: 0
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Sub,Inter Black,104,&H00FFFFFF,&H00FFFFFF,&H00000000,&H80000000,0,0,0,0,100,100,1,0,1,7,4,2,60,60,620,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.00,0:00:00.49,Sub,,0,0,0,,{\fscx82\fscy82\t(0,90,\fscx100\fscy100)}{\c&H2A2AFF&}ASÍ{\c&HFFFFFF&} QUE
+Dialogue: 0,0:00:00.49,0:00:00.65,Sub,,0,0,0,,ASÍ {\c&H2A2AFF&}QUE{\c&HFFFFFF&}
+Dialogue: 0,0:00:00.65,0:00:00.83,Sub,,0,0,0,,{\fscx82\fscy82\t(0,90,\fscx100\fscy100)}{\c&H2A2AFF&}SI{\c&HFFFFFF&} ERES DJ
+Dialogue: 0,0:00:00.83,0:00:00.99,Sub,,0,0,0,,SI {\c&H2A2AFF&}ERES{\c&HFFFFFF&} DJ
+Dialogue: 0,0:00:00.99,0:00:01.27,Sub,,0,0,0,,SI ERES {\c&H2A2AFF&}DJ{\c&HFFFFFF&}
+Dialogue: 0,0:00:01.27,0:00:01.71,Sub,,0,0,0,,{\fscx82\fscy82\t(0,90,\fscx100\fscy100)}{\c&H2A2AFF&}O{\c&HFFFFFF&} TAN SOLO
+Dialogue: 0,0:00:01.71,0:00:01.83,Sub,,0,0,0,,O {\c&H2A2AFF&}TAN{\c&HFFFFFF&} SOLO
+Dialogue: 0,0:00:01.83,0:00:02.03,Sub,,0,0,0,,O TAN {\c&H2A2AFF&}SOLO{\c&HFFFFFF&}
+Dialogue: 0,0:00:02.03,0:00:02.23,Sub,,0,0,0,,{\fscx82\fscy82\t(0,90,\fscx100\fscy100)}{\c&H2A2AFF&}QUIERES{\c&HFFFFFF&} TENER
+Dialogue: 0,0:00:02.23,0:00:02.57,Sub,,0,0,0,,QUIERES {\c&H2A2AFF&}TENER{\c&HFFFFFF&}
+Dialogue: 0,0:00:02.57,0:00:02.83,Sub,,0,0,0,,{\fscx82\fscy82\t(0,90,\fscx100\fscy100)}{\c&H2A2AFF&}ESTA{\c&HFFFFFF&} VERSIÓN
+Dialogue: 0,0:00:02.83,0:00:03.15,Sub,,0,0,0,,ESTA {\c&H2A2AFF&}VERSIÓN{\c&HFFFFFF&}
+Dialogue: 0,0:00:03.15,0:00:03.33,Sub,,0,0,0,,{\fscx82\fscy82\t(0,90,\fscx100\fscy100)}{\c&H2A2AFF&}DE{\c&HFFFFFF&} RETRICA
+Dialogue: 0,0:00:03.33,0:00:03.97,Sub,,0,0,0,,DE {\c&H2A2AFF&}RETRICA{\c&HFFFFFF&}
+Dialogue: 0,0:00:03.97,0:00:04.59,Sub,,0,0,0,,{\fscx82\fscy82\t(0,90,\fscx100\fscy100)}{\c&H2A2AFF&}SOLO{\c&HFFFFFF&} TIENES QUE
+Dialogue: 0,0:00:04.59,0:00:04.83,Sub,,0,0,0,,SOLO {\c&H2A2AFF&}TIENES{\c&HFFFFFF&} QUE
+Dialogue: 0,0:00:04.83,0:00:05.05,Sub,,0,0,0,,SOLO TIENES {\c&H2A2AFF&}QUE{\c&HFFFFFF&}
+Dialogue: 0,0:00:05.05,0:00:05.23,Sub,,0,0,0,,{\fscx82\fscy82\t(0,90,\fscx100\fscy100)}{\c&H2A2AFF&}DARLE{\c&HFFFFFF&} LIKE
+Dialogue: 0,0:00:05.23,0:00:05.79,Sub,,0,0,0,,DARLE {\c&H2A2AFF&}LIKE{\c&HFFFFFF&}
+Dialogue: 0,0:00:05.79,0:00:06.67,Sub,,0,0,0,,{\fscx82\fscy82\t(0,90,\fscx100\fscy100)}{\c&H2A2AFF&}COMENTAR{\c&HFFFFFF&}
+Dialogue: 0,0:00:06.67,0:00:06.85,Sub,,0,0,0,,{\fscx82\fscy82\t(0,90,\fscx100\fscy100)}{\c&H2A2AFF&}Y{\c&HFFFFFF&} COMPARTIR
+Dialogue: 0,0:00:06.85,0:00:07.25,Sub,,0,0,0,,Y {\c&H2A2AFF&}COMPARTIR{\c&HFFFFFF&}
+Dialogue: 0,0:00:07.25,0:00:07.47,Sub,,0,0,0,,{\fscx82\fscy82\t(0,90,\fscx100\fscy100)}{\c&H2A2AFF&}EN{\c&HFFFFFF&} TU HISTORIA
+Dialogue: 0,0:00:07.47,0:00:07.57,Sub,,0,0,0,,EN {\c&H2A2AFF&}TU{\c&HFFFFFF&} HISTORIA
+Dialogue: 0,0:00:07.57,0:00:08.05,Sub,,0,0,0,,EN TU {\c&H2A2AFF&}HISTORIA{\c&HFFFFFF&}

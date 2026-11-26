@@ -1,0 +1,51 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 1080
+PlayResY: 1920
+WrapStyle: 0
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Sub,Inter Black,104,&H00FFFFFF,&H00FFFFFF,&H00000000,&H80000000,0,0,0,0,100,100,1,0,1,7,4,2,60,60,620,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.00,0:00:00.44,Sub,,0,0,0,,{\fscx82\fscy82\t(0,90,\fscx100\fscy100)}{\c&H2A2AFF&}ESTOY{\c&HFFFFFF&} SEGURO
+Dialogue: 0,0:00:00.44,0:00:00.78,Sub,,0,0,0,,ESTOY {\c&H2A2AFF&}SEGURO{\c&HFFFFFF&}
+Dialogue: 0,0:00:00.78,0:00:01.00,Sub,,0,0,0,,{\fscx82\fscy82\t(0,90,\fscx100\fscy100)}{\c&H2A2AFF&}DE{\c&HFFFFFF&} QUE ESTA
+Dialogue: 0,0:00:01.00,0:00:01.10,Sub,,0,0,0,,DE {\c&H2A2AFF&}QUE{\c&HFFFFFF&} ESTA
+Dialogue: 0,0:00:01.10,0:00:01.24,Sub,,0,0,0,,DE QUE {\c&H2A2AFF&}ESTA{\c&HFFFFFF&}
+Dialogue: 0,0:00:01.24,0:00:01.68,Sub,,0,0,0,,{\fscx82\fscy82\t(0,90,\fscx100\fscy100)}{\c&H2A2AFF&}CANCIÓN{\c&HFFFFFF&}
+Dialogue: 0,0:00:01.68,0:00:02.06,Sub,,0,0,0,,{\fscx82\fscy82\t(0,90,\fscx100\fscy100)}{\c&H2A2AFF&}TE{\c&HFFFFFF&} LA SABES
+Dialogue: 0,0:00:02.06,0:00:02.18,Sub,,0,0,0,,TE {\c&H2A2AFF&}LA{\c&HFFFFFF&} SABES
+Dialogue: 0,0:00:02.18,0:00:02.68,Sub,,0,0,0,,TE LA {\c&H2A2AFF&}SABES{\c&HFFFFFF&}
+Dialogue: 0,0:00:08.21,0:00:09.01,Sub,,0,0,0,,{\fscx82\fscy82\t(0,90,\fscx100\fscy100)}{\c&H2A2AFF&}PERO{\c&HFFFFFF&} ¿QUÉ
+Dialogue: 0,0:00:09.01,0:00:09.19,Sub,,0,0,0,,PERO {\c&H2A2AFF&}¿QUÉ{\c&HFFFFFF&}
+Dialogue: 0,0:00:09.19,0:00:09.65,Sub,,0,0,0,,{\fscx82\fscy82\t(0,90,\fscx100\fscy100)}{\c&H2A2AFF&}PASARÍA{\c&HFFFFFF&}
+Dialogue: 0,0:00:09.65,0:00:10.05,Sub,,0,0,0,,{\fscx82\fscy82\t(0,90,\fscx100\fscy100)}{\c&H2A2AFF&}SI{\c&HFFFFFF&} LO
+Dialogue: 0,0:00:10.05,0:00:10.19,Sub,,0,0,0,,SI {\c&H2A2AFF&}LO{\c&HFFFFFF&}
+Dialogue: 0,0:00:10.19,0:00:10.79,Sub,,0,0,0,,{\fscx82\fscy82\t(0,90,\fscx100\fscy100)}{\c&H2A2AFF&}HICIÉSEMOS{\c&HFFFFFF&}
+Dialogue: 0,0:00:10.79,0:00:11.05,Sub,,0,0,0,,{\fscx82\fscy82\t(0,90,\fscx100\fscy100)}{\c&H2A2AFF&}EN{\c&HFFFFFF&} REGGAETÓN
+Dialogue: 0,0:00:11.05,0:00:11.45,Sub,,0,0,0,,EN {\c&H2A2AFF&}REGGAETÓN{\c&HFFFFFF&}
+Dialogue: 0,0:00:11.45,0:00:11.94,Sub,,0,0,0,,{\fscx82\fscy82\t(0,90,\fscx100\fscy100)}{\c&H2A2AFF&}ANTIGUO?{\c&HFFFFFF&}
+Dialogue: 0,0:00:11.97,0:00:12.21,Sub,,0,0,0,,{\fscx82\fscy82\t(0,90,\fscx100\fscy100)}{\c&H2A2AFF&}VAMOS{\c&HFFFFFF&} A HACERLO
+Dialogue: 0,0:00:12.21,0:00:12.29,Sub,,0,0,0,,VAMOS {\c&H2A2AFF&}A{\c&HFFFFFF&} HACERLO
+Dialogue: 0,0:00:12.29,0:00:12.72,Sub,,0,0,0,,VAMOS A {\c&H2A2AFF&}HACERLO{\c&HFFFFFF&}
+Dialogue: 0,0:00:22.20,0:00:22.90,Sub,,0,0,0,,{\fscx82\fscy82\t(0,90,\fscx100\fscy100)}{\c&H2A2AFF&}PRIMERO{\c&HFFFFFF&} LA VOZ
+Dialogue: 0,0:00:22.90,0:00:23.05,Sub,,0,0,0,,PRIMERO {\c&H2A2AFF&}LA{\c&HFFFFFF&} VOZ
+Dialogue: 0,0:00:23.05,0:00:23.63,Sub,,0,0,0,,PRIMERO LA {\c&H2A2AFF&}VOZ{\c&HFFFFFF&}
+Dialogue: 0,0:00:28.95,0:00:29.45,Sub,,0,0,0,,{\fscx82\fscy82\t(0,90,\fscx100\fscy100)}{\c&H2A2AFF&}AHORA{\c&HFFFFFF&} UNA
+Dialogue: 0,0:00:29.45,0:00:29.85,Sub,,0,0,0,,AHORA {\c&H2A2AFF&}UNA{\c&HFFFFFF&}
+Dialogue: 0,0:00:29.85,0:00:30.05,Sub,,0,0,0,,{\fscx82\fscy82\t(0,90,\fscx100\fscy100)}{\c&H2A2AFF&}BUENA{\c&HFFFFFF&} MELODÍA
+Dialogue: 0,0:00:30.05,0:00:30.66,Sub,,0,0,0,,BUENA {\c&H2A2AFF&}MELODÍA{\c&HFFFFFF&}
+Dialogue: 0,0:00:41.50,0:00:41.72,Sub,,0,0,0,,{\fscx82\fscy82\t(0,90,\fscx100\fscy100)}{\c&H2A2AFF&}POR{\c&HFFFFFF&} ÚLTIMO
+Dialogue: 0,0:00:41.72,0:00:42.04,Sub,,0,0,0,,POR {\c&H2A2AFF&}ÚLTIMO{\c&HFFFFFF&}
+Dialogue: 0,0:00:42.04,0:00:42.46,Sub,,0,0,0,,{\fscx82\fscy82\t(0,90,\fscx100\fscy100)}{\c&H2A2AFF&}UNAS{\c&HFFFFFF&} BUENAS
+Dialogue: 0,0:00:42.46,0:00:42.72,Sub,,0,0,0,,UNAS {\c&H2A2AFF&}BUENAS{\c&HFFFFFF&}
+Dialogue: 0,0:00:42.72,0:00:43.36,Sub,,0,0,0,,{\fscx82\fscy82\t(0,90,\fscx100\fscy100)}{\c&H2A2AFF&}BATERÍAS{\c&HFFFFFF&}
+Dialogue: 0,0:00:49.46,0:00:49.58,Sub,,0,0,0,,{\fscx82\fscy82\t(0,90,\fscx100\fscy100)}{\c&H2A2AFF&}Y{\c&HFFFFFF&} TODO JUNTO
+Dialogue: 0,0:00:49.58,0:00:49.81,Sub,,0,0,0,,Y {\c&H2A2AFF&}TODO{\c&HFFFFFF&} JUNTO
+Dialogue: 0,0:00:49.81,0:00:50.31,Sub,,0,0,0,,Y TODO {\c&H2A2AFF&}JUNTO{\c&HFFFFFF&}
+Dialogue: 0,0:00:50.31,0:00:50.54,Sub,,0,0,0,,{\fscx82\fscy82\t(0,90,\fscx100\fscy100)}{\c&H2A2AFF&}ASÍ{\c&HFFFFFF&} QUEDARÍA
+Dialogue: 0,0:00:50.54,0:00:51.36,Sub,,0,0,0,,ASÍ {\c&H2A2AFF&}QUEDARÍA{\c&HFFFFFF&}
