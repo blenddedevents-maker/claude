@@ -50,3 +50,6 @@
 | 2026-11-26 | decisión | Sincronía de la grabación de la batería: amplitud de la onda bajo el cursor (x=130) frente al RMS del WAV → wav_t = grab_t − 1,78 s (r = 0,89). Se usa desde 1,275 s de la grabación (entra a 1,9 s del clip) y sale a 7,80 s del clip, al terminar el audio |
 | 2026-11-26 | versión | v11: `reel-subtitulos-transicion_v11.mp4` (50,3 s) |
 | 2026-11-26 | versión | Clip suelto «Y todo junto así quedaría» (886×1920, 1,87 s): solo subtítulos, mismo estilo (PlayResX ajustado a 886). `04_salidas/borradores/todo-junto-subtitulado_v01.mp4`, subtítulos en `03_trabajo/subtitulos_todo-junto_v01.ass`. Sin color ni recorte (no pedido) |
+| 2026-11-26 | decisión | v12: el clip «Y todo junto así quedaría» se añade al final del reel. El clip de las baterías se corta a 8,9 s (después de mirar a cámara), con corte directo y sin fundido. Del clip nuevo se recortan las franjas negras de la grabación de pantalla (886×1574 útil, ya en 9:16 → crop 884:1572:0:175 → 1080×1920), con el color suave del estudio (mismo filtro que los clips 5–7), +9,1 dB (−16 LUFS) y fundido a negro final de 0,37 s |
+| 2026-11-26 | decisión | Subtítulos del clip 8 colocados en el corte real (49,60 s) |
+| 2026-11-26 | versión | v12: `reel-subtitulos-transicion_v12.mp4` (51,5 s). Subtítulos en `03_trabajo/subtitulos_v12.ass` |
