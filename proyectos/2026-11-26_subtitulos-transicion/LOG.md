@@ -20,3 +20,5 @@
 | 2026-11-26 | decisión | Color del clip 4: igualación previa (más exposición y gamma, más calidez, menos morado) + la misma corrección suave al 40 % |
 | 2026-11-26 | decisión | Subtítulos del clip 4: «Vamos a hacerlo» (luego solo hay música, sin voz). Final de 10 s con fundido a negro y de audio |
 | 2026-11-26 | versión | v04: `reel-subtitulos-transicion_v04.mp4` (22,5 s). Subtítulos en `03_trabajo/subtitulos_v04.ass` |
+| 2026-11-26 | decisión | Feedback: cortar el clip 3 antes de que el usuario vaya hacia la cámara. Nuevo final a 7,12 s del original (justo al acabar «antiguo», cuya voz termina a ~7,20 s), con fundido de audio de 0,06 s. El clip 3 pasa de 4,8 s a 4,27 s |
+| 2026-11-26 | versión | v05: `reel-subtitulos-transicion_v05.mp4` (22,0 s). Subtítulos desplazados en `03_trabajo/subtitulos_v05.ass` |
