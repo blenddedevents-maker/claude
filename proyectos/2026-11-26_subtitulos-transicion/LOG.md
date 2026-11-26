@@ -39,3 +39,9 @@
 | 2026-11-26 | decisión | Transición del clip 5 al 6 con la mano tapando la cámara (se quita el fundido a negro del clip 5). Final del reel con fundido a negro a 13,75 s del original. Voz +6,6 dB, melodía +1,7 dB (las dos a ~−14/−16 LUFS) |
 | 2026-11-26 | decisión | Corrección: línea de color en la fila superior en el plano completo del clip 6 (el redondeo dejaba la imagen escalada en 1918 px) → se fuerza un tamaño mínimo de 1084×1922 |
 | 2026-11-26 | versión | v09: `reel-subtitulos-transicion_v09.mp4` (41,1 s). Subtítulos en `03_trabajo/subtitulos_v09.ass` |
+| 2026-11-26 | decisión | v10: séptimo clip («Por último unas buenas baterías»). El clip de la melodía se corta a 13,40 s del original (fin de la melodía, antes de llevarse la mano a la barbilla) con corte directo y sin fundido. El clip 7 va de 0 a 9,55 s, con la mirada final a cámara y fundido a negro como cierre del reel |
+| 2026-11-26 | decisión | Sincronía de la batería por envolvente de ataques: el WAV empieza a 2,405 s del clip (r = 0,98, estable en 4 tramos) |
+| 2026-11-26 | decisión | Visualización de batería con el estilo de la captura (`01_referencias/visual/bateria-daw_referencia.mov`): pistas MIDI naranjas #FE9B26 (golpes detectados de bombo y caja, y de platos, por bandas de frecuencia + onsets) alternadas con pistas de audio turquesa #52FDE4 con la onda (graves y completa). Script `03_trabajo/onda/render_bateria.py`. Entra deslizándose a 1,9 s y sale hacia arriba a 8,05 s, al terminar la batería |
+| 2026-11-26 | decisión | Audio del clip 7: voz +8,2 dB (−16 LUFS), batería −6,2 dB (−14 LUFS; el WAV venía a −7,8 LUFS con pico de +0,2 dBFS) |
+| 2026-11-26 | decisión | Subtítulos del clip 7 desplazados +0,05 s para cuadrar con el corte real (40,733 s; redondeo acumulado de las duraciones) |
+| 2026-11-26 | versión | v10: `reel-subtitulos-transicion_v10.mp4` (50,3 s). Subtítulos en `03_trabajo/subtitulos_v10.ass` |
