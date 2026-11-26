@@ -65,3 +65,4 @@
 | 2026-11-26 | versión | v15: `reel-subtitulos-transicion_v15.mp4` (50,7 s). Subtítulos en `03_trabajo/subtitulos_v15.ass` |
 | 2026-11-26 | decisión | Feedback: el trozo de Amador era demasiado corto. Ahora va de 3,20 a 4,30 s del original (1,1 s, 33 fotogramas): saca y lanza el cinturón con el «¡Eeeeh!», «¡Espartaco!» y el golpe. El corte final sigue en el golpe. Filtro en `03_trabajo/filtro-meme-espartaco_v16.txt` (delogo hasta 0,833 s; parche desde 0,833 s) |
 | 2026-11-26 | versión | v16: `reel-subtitulos-transicion_v16.mp4` (51,4 s). Subtítulos posteriores +0,667 s en `03_trabajo/subtitulos_v16.ass` |
+| 2026-11-26 | aprobación | El usuario aprueba la v16 («vale perfecto»). Copiada a `04_salidas/final/reel-produccion-lucho_v16.mp4` (1080×1920, 30 fps, H.264 + AAC, 51,4 s) |
