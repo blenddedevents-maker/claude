@@ -81,3 +81,4 @@
 | 2026-11-26 | versión | v20: `reel-subtitulos-transicion_v20.mp4` (99,3 s, 85 MB) |
 | 2026-11-26 | decisión | Feedback: el corte de «reggaetón antiguo» a «Vamos a hacerlo» era muy brusco. Clip 3 alargado 0,5 s (final a 7,62 s del original, antes era 7,12): la voz de «antiguo» termina de apagarse y el brazo hacia la cámara (7,73 s) sigue sin verse. Fundido de audio de 0,1 s. Todo lo posterior se desplaza +0,5 s (subtítulos, voz de «todo junto» a 50,167 s, corte al CTA a 91,367 s) |
 | 2026-11-26 | versión | v21: `reel-subtitulos-transicion_v21.mp4` (99,8 s, 85,6 MB, dos pasadas a 6,6 Mbps). Subtítulos en `03_trabajo/subtitulos_v21.ass` |
+| 2026-11-26 | aprobación | El usuario aprueba la v21 («vale perfecto»). Copiada a `04_salidas/final/reel-produccion-lucho_v21.mp4` (sustituye a la v16 en final/; la v16 sigue en borradores/) |
