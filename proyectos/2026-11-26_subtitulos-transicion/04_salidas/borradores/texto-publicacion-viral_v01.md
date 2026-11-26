@@ -10,4 +10,4 @@ Convertí esta de Lucho RK en reggaetón antiguo 🔥 ¿Cuál hago ahora? 👇
 
 **Primer comentario fijado:** «Comenta "RETRICA" y te paso la versión completa 🎧»
 
-**Portada:** `portada-viral_v02.jpg`
+**Portada:** `portada-viral_v03.jpg`
